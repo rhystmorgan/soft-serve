@@ -7,3 +7,7 @@ data/
 completions/
 manpages/
 soft_serve_ed25519*
+AGENTS.md
+deploy.md
+CATPPUCCIN_THEME_NOTES.md
+syntax_highlighting_implementation.md
