@@ -525,3 +525,389 @@ func DefaultStyles() *Styles {
 
 	return s
 }
+
+// CatppuccinStyles returns Catppuccin-themed styles for the UI.
+func CatppuccinStyles() *Styles {
+	// Catppuccin Mocha color palette
+	peach := lipgloss.Color("#fab387")    // Primary UI accent
+	yellow := lipgloss.Color("#f9e2af")   // Git hashes
+	blue := lipgloss.Color("#89b4fa")     // Directories, tabs
+	lavender := lipgloss.Color("#b4befe") // Branches
+	mauve := lipgloss.Color("#cba6f7")    // Tags
+	sky := lipgloss.Color("#89dceb")      // Commands, secondary actions
+	green := lipgloss.Color("#a6e3a1")    // Success, additions
+	red := lipgloss.Color("#f38ba8")      // Errors, deletions
+
+	// Text hierarchy
+	text := lipgloss.Color("#cdd6f4")     // Primary text
+	subtext1 := lipgloss.Color("#bac2de") // Secondary text
+	subtext0 := lipgloss.Color("#a6adc8") // Tertiary text
+	overlay1 := lipgloss.Color("#7f849c") // Muted text
+	overlay0 := lipgloss.Color("#6c7086") // Very muted
+
+	// Backgrounds
+	crust := lipgloss.Color("#11111b")    // Main background
+	surface0 := lipgloss.Color("#313244") // Borders
+	surface1 := lipgloss.Color("#45475a") // Subtle backgrounds
+
+	s := new(Styles)
+
+	s.ActiveBorderColor = peach
+	s.InactiveBorderColor = overlay0
+
+	s.App = lipgloss.NewStyle().
+		Margin(1, 2)
+
+	s.ServerName = lipgloss.NewStyle().
+		Height(1).
+		MarginLeft(1).
+		MarginBottom(1).
+		Padding(0, 1).
+		Background(peach).
+		Foreground(crust).
+		Bold(true)
+
+	s.TopLevelNormalTab = lipgloss.NewStyle().
+		MarginRight(2)
+
+	s.TopLevelActiveTab = s.TopLevelNormalTab.
+		Foreground(blue)
+
+	s.TopLevelActiveTabDot = lipgloss.NewStyle().
+		Foreground(blue)
+
+	s.RepoSelector.Normal.Base = lipgloss.NewStyle().
+		PaddingLeft(1).
+		Border(lipgloss.Border{Left: " "}, false, false, false, true).
+		Height(3)
+
+	s.RepoSelector.Normal.Title = lipgloss.NewStyle().
+		Foreground(text).
+		Bold(true)
+
+	s.RepoSelector.Normal.Desc = lipgloss.NewStyle().
+		Foreground(subtext1)
+
+	s.RepoSelector.Normal.Command = lipgloss.NewStyle().
+		Foreground(sky)
+
+	s.RepoSelector.Normal.Updated = lipgloss.NewStyle().
+		Foreground(overlay1)
+
+	s.RepoSelector.Active.Base = s.RepoSelector.Normal.Base.
+		BorderStyle(lipgloss.Border{Left: "┃"}).
+		BorderForeground(peach)
+
+	s.RepoSelector.Active.Title = s.RepoSelector.Normal.Title.
+		Foreground(peach)
+
+	s.RepoSelector.Active.Desc = s.RepoSelector.Normal.Desc.
+		Foreground(subtext0)
+
+	s.RepoSelector.Active.Updated = s.RepoSelector.Normal.Updated.
+		Foreground(peach)
+
+	s.RepoSelector.Active.Command = s.RepoSelector.Normal.Command.
+		Foreground(sky)
+
+	s.MenuItem = lipgloss.NewStyle().
+		PaddingLeft(1).
+		Border(lipgloss.Border{
+			Left: " ",
+		}, false, false, false, true).
+		Height(3)
+
+	s.MenuLastUpdate = lipgloss.NewStyle().
+		Foreground(overlay1).
+		Align(lipgloss.Right)
+
+	s.Repo.Base = lipgloss.NewStyle()
+
+	s.Repo.Title = lipgloss.NewStyle().
+		Padding(0, 2)
+
+	s.Repo.Command = lipgloss.NewStyle().
+		Foreground(sky)
+
+	s.Repo.Body = lipgloss.NewStyle().
+		Margin(1, 0)
+
+	s.Repo.Header = lipgloss.NewStyle().
+		MaxHeight(2).
+		Border(lipgloss.NormalBorder(), false, false, true, false).
+		BorderForeground(surface0)
+
+	s.Repo.HeaderName = lipgloss.NewStyle().
+		Foreground(peach).
+		Bold(true)
+
+	s.Repo.HeaderDesc = lipgloss.NewStyle().
+		Foreground(subtext1)
+
+	s.Footer = lipgloss.NewStyle().
+		MarginTop(1).
+		Padding(0, 1).
+		Height(1)
+
+	s.Branch = lipgloss.NewStyle().
+		Foreground(lavender).
+		Background(surface1).
+		Padding(0, 1)
+
+	s.HelpKey = lipgloss.NewStyle().
+		Foreground(overlay1)
+
+	s.HelpValue = lipgloss.NewStyle().
+		Foreground(overlay0)
+
+	s.HelpDivider = lipgloss.NewStyle().
+		Foreground(surface0).
+		SetString(" • ")
+
+	s.URLStyle = lipgloss.NewStyle().
+		MarginLeft(1).
+		Foreground(sky)
+
+	s.Error = lipgloss.NewStyle().
+		MarginTop(2)
+
+	s.ErrorTitle = lipgloss.NewStyle().
+		Foreground(crust).
+		Background(red).
+		Bold(true).
+		Padding(0, 1)
+
+	s.ErrorBody = lipgloss.NewStyle().
+		Foreground(text).
+		MarginLeft(2)
+
+	s.LogItem.Normal.Base = lipgloss.NewStyle().
+		Border(lipgloss.Border{
+			Left: " ",
+		}, false, false, false, true).
+		PaddingLeft(1)
+
+	s.LogItem.Active.Base = s.LogItem.Normal.Base.
+		Border(lipgloss.Border{
+			Left: "┃",
+		}, false, false, false, true).
+		BorderForeground(peach)
+
+	s.LogItem.Normal.Hash = lipgloss.NewStyle().
+		Foreground(yellow)
+
+	s.LogItem.Active.Hash = lipgloss.NewStyle().
+		Foreground(yellow).
+		Bold(true)
+
+	s.LogItem.Normal.Title = lipgloss.NewStyle().
+		Foreground(text)
+
+	s.LogItem.Active.Title = lipgloss.NewStyle().
+		Foreground(peach).
+		Bold(true)
+
+	s.LogItem.Normal.Desc = lipgloss.NewStyle().
+		Foreground(subtext1)
+
+	s.LogItem.Active.Desc = lipgloss.NewStyle().
+		Foreground(subtext0)
+
+	s.LogItem.Active.Keyword = s.LogItem.Active.Desc.
+		Foreground(peach)
+
+	s.Log.Commit = lipgloss.NewStyle().
+		Margin(0, 2)
+
+	s.Log.CommitHash = lipgloss.NewStyle().
+		Foreground(yellow).
+		Bold(true)
+
+	s.Log.CommitBody = lipgloss.NewStyle().
+		MarginTop(1).
+		MarginLeft(2)
+
+	s.Log.CommitStatsAdd = lipgloss.NewStyle().
+		Foreground(green).
+		Bold(true)
+
+	s.Log.CommitStatsDel = lipgloss.NewStyle().
+		Foreground(red).
+		Bold(true)
+
+	s.Log.Paginator = lipgloss.NewStyle().
+		Margin(0).
+		Align(lipgloss.Center)
+
+	s.Ref.Normal.Item = lipgloss.NewStyle().
+		Foreground(text)
+
+	s.Ref.ItemSelector = lipgloss.NewStyle().
+		Foreground(peach).
+		SetString("> ")
+
+	s.Ref.Active.Item = lipgloss.NewStyle().
+		Foreground(peach)
+
+	s.Ref.Normal.Base = lipgloss.NewStyle()
+
+	s.Ref.Active.Base = lipgloss.NewStyle()
+
+	s.Ref.Normal.ItemTag = lipgloss.NewStyle().
+		Foreground(mauve)
+
+	s.Ref.Active.ItemTag = lipgloss.NewStyle().
+		Bold(true).
+		Foreground(mauve)
+
+	s.Ref.Normal.ItemDesc = lipgloss.NewStyle().
+		Foreground(subtext1)
+
+	s.Ref.Active.ItemDesc = lipgloss.NewStyle().
+		Foreground(peach)
+
+	s.Ref.Normal.ItemHash = lipgloss.NewStyle().
+		Foreground(yellow).
+		Bold(true)
+
+	s.Ref.Active.ItemHash = lipgloss.NewStyle().
+		Foreground(yellow).
+		Bold(true)
+
+	s.Ref.Paginator = s.Log.Paginator
+
+	s.Ref.Selector = lipgloss.NewStyle()
+
+	s.Tree.Selector = lipgloss.NewStyle().
+		Width(1).
+		Foreground(peach)
+
+	s.Tree.Normal.FileName = lipgloss.NewStyle().
+		MarginLeft(1).
+		Foreground(text)
+
+	s.Tree.Active.FileName = s.Tree.Normal.FileName.
+		Bold(true).
+		Foreground(peach)
+
+	s.Tree.Normal.FileDir = lipgloss.NewStyle().
+		Foreground(blue)
+
+	s.Tree.Active.FileDir = lipgloss.NewStyle().
+		Foreground(blue).
+		Bold(true)
+
+	s.Tree.Normal.FileMode = lipgloss.NewStyle().
+		Width(10).
+		Foreground(overlay1)
+
+	s.Tree.Active.FileMode = s.Tree.Normal.FileMode.
+		Foreground(subtext0)
+
+	s.Tree.Normal.FileSize = lipgloss.NewStyle().
+		Foreground(overlay1)
+
+	s.Tree.Active.FileSize = lipgloss.NewStyle().
+		Foreground(subtext0)
+
+	s.Tree.FileContent = lipgloss.NewStyle()
+
+	s.Tree.Paginator = s.Log.Paginator
+
+	s.Tree.Blame.Hash = lipgloss.NewStyle().
+		Foreground(yellow).
+		Bold(true)
+
+	s.Tree.Blame.Message = lipgloss.NewStyle().
+		Foreground(text)
+
+	s.Tree.Blame.Who = lipgloss.NewStyle().
+		Foreground(subtext1)
+
+	s.Spinner = lipgloss.NewStyle().
+		MarginTop(1).
+		MarginLeft(2).
+		Foreground(peach)
+
+	s.SpinnerContainer = lipgloss.NewStyle()
+
+	s.NoContent = lipgloss.NewStyle().
+		MarginTop(1).
+		MarginLeft(2).
+		Foreground(overlay1)
+
+	s.StatusBar = lipgloss.NewStyle().
+		Height(1)
+
+	s.StatusBarKey = lipgloss.NewStyle().
+		Bold(true).
+		Padding(0, 1).
+		Background(peach).
+		Foreground(crust)
+
+	s.StatusBarValue = lipgloss.NewStyle().
+		Padding(0, 1).
+		Background(surface1).
+		Foreground(text)
+
+	s.StatusBarInfo = lipgloss.NewStyle().
+		Padding(0, 1).
+		Background(blue).
+		Foreground(crust)
+
+	s.StatusBarBranch = lipgloss.NewStyle().
+		Padding(0, 1).
+		Background(lavender).
+		Foreground(crust)
+
+	s.StatusBarHelp = lipgloss.NewStyle().
+		Padding(0, 1).
+		Background(surface0).
+		Foreground(subtext1)
+
+	s.Tabs = lipgloss.NewStyle().
+		Height(1)
+
+	s.TabInactive = lipgloss.NewStyle().
+		Foreground(subtext1)
+
+	s.TabActive = lipgloss.NewStyle().
+		Underline(true).
+		Foreground(blue)
+
+	s.TabSeparator = lipgloss.NewStyle().
+		SetString("│").
+		Padding(0, 1).
+		Foreground(surface0)
+
+	s.Code.LineDigit = lipgloss.NewStyle().
+		Foreground(overlay0)
+
+	s.Code.LineBar = lipgloss.NewStyle().
+		Foreground(surface0)
+
+	s.Stash.Normal.Message = lipgloss.NewStyle().
+		MarginLeft(1).
+		Foreground(text)
+
+	s.Stash.Active.Message = s.Stash.Normal.Message.
+		Foreground(peach)
+
+	s.Stash.Title = lipgloss.NewStyle().
+		Foreground(yellow).
+		Bold(true)
+
+	s.Stash.Selector = lipgloss.NewStyle().
+		Width(1).
+		Foreground(peach)
+
+	return s
+}
+
+// GetStyles returns the appropriate styles based on environment or preference.
+// Defaults to Catppuccin theme, but can fall back to DefaultStyles.
+func GetStyles() *Styles {
+	// For now, always return Catppuccin theme
+	// In the future, this could check environment variables or config
+	return CatppuccinStyles()
+}

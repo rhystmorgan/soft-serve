@@ -45,7 +45,7 @@ func NewCommon(ctx context.Context, width, height int) Common {
 		ctx:    ctx,
 		Width:  width,
 		Height: height,
-		Styles: styles.DefaultStyles(),
+		Styles: styles.GetStyles(),
 		KeyMap: keymap.DefaultKeyMap(),
 		Zone:   zone.New(),
 		Logger: log.FromContext(ctx).WithPrefix("ui"),
