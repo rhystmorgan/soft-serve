@@ -22,6 +22,7 @@ A tasty, self-hostable Git server for the command line. 🍦
 - Manage repos with SSH
 - Create repos on demand with SSH or `git push`
 - Browse repos, files and commits with SSH-accessible UI
+- Git activity tracking and analytics with interactive calendar view
 - Print files over SSH with or without syntax highlighting and line numbers
 - Easy access control
   - SSH authentication using public keys
@@ -329,10 +330,10 @@ config. For instance, to use `ssh soft` instead of typing `ssh localhost -i
 file `~/.ssh/config`.
 
 ```conf
-Host soft
-  HostName localhost
+Host 5.161.226.8
+  HostName 5.161.226.8
   Port 23231
-  IdentityFile ~/.ssh/id_ed25519
+  IdentityFile path/to/your/key
   IdentitiesOnly yes
 ```
 
@@ -711,11 +712,22 @@ repository.
 ssh localhost -p 23231
 ```
 
-It's also possible to “link” to a specific repo:
+It's also possible to "link" to a specific repo:
 
 ```sh
 ssh -p 23231 localhost -t soft-serve
 ```
+
+### Repository Browser
+
+The TUI includes several tabs for exploring repositories:
+
+- **Files** - Browse repository files and directories
+- **Log** - View commit history and changes
+- **Refs** - Explore branches and tags
+- **Activity** - Interactive Git activity analytics with calendar view, daily summaries, and author statistics
+
+Navigate between tabs using the tab key or number keys. The Activity tab provides comprehensive insights into repository activity patterns, commit frequency, and contributor statistics.
 
 You can copy text to your clipboard over SSH. For instance, you can press
 <kbd>c</kbd> on the highlighted repo in the menu to copy the clone command

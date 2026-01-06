@@ -164,6 +164,36 @@ type Styles struct {
 		LineDigit lipgloss.Style
 		LineBar   lipgloss.Style
 	}
+
+	ActivityTracker struct {
+		Container lipgloss.Style
+		Title     lipgloss.Style
+		Grid      lipgloss.Style
+		GridRow   lipgloss.Style
+		Day       struct {
+			None   lipgloss.Style
+			Low    lipgloss.Style
+			Medium lipgloss.Style
+			High   lipgloss.Style
+		}
+		MonthLabel      lipgloss.Style
+		WeekdayLabel    lipgloss.Style
+		Legend          lipgloss.Style
+		LegendItem      lipgloss.Style
+		Stats           lipgloss.Style
+		StatValue       lipgloss.Style
+		StatLabel       lipgloss.Style
+		SelectedDay     lipgloss.Style
+		SelectedItem    lipgloss.Style
+		DetailContainer lipgloss.Style
+		CommitItem      lipgloss.Style
+		FilterContainer lipgloss.Style
+		FilterActive    lipgloss.Style
+		FilterInactive  lipgloss.Style
+		PanelTitle      lipgloss.Style
+		PanelItem       lipgloss.Style
+		HelpText        lipgloss.Style
+	}
 }
 
 // DefaultStyles returns default styles for the UI.
@@ -532,7 +562,8 @@ func CatppuccinStyles() *Styles {
 	peach := lipgloss.Color("#fab387")    // Primary UI accent
 	yellow := lipgloss.Color("#f9e2af")   // Git hashes
 	blue := lipgloss.Color("#89b4fa")     // Directories, tabs
-	lavender := lipgloss.Color("#b4befe") // Branches
+	sapphire := lipgloss.Color("#74c7ec") // Activity tracker low
+	lavender := lipgloss.Color("#b4befe") // Branches, activity tracker high
 	mauve := lipgloss.Color("#cba6f7")    // Tags
 	sky := lipgloss.Color("#89dceb")      // Commands, secondary actions
 	green := lipgloss.Color("#a6e3a1")    // Success, additions
@@ -900,6 +931,129 @@ func CatppuccinStyles() *Styles {
 	s.Stash.Selector = lipgloss.NewStyle().
 		Width(1).
 		Foreground(peach)
+
+	// ActivityTracker styles with Catppuccin blue progression
+	s.ActivityTracker.Container = lipgloss.NewStyle().
+		Padding(1, 2).
+		Margin(1, 0)
+
+	s.ActivityTracker.Title = lipgloss.NewStyle().
+		Foreground(peach).
+		Bold(true).
+		MarginBottom(1)
+
+	s.ActivityTracker.Grid = lipgloss.NewStyle().
+		MarginBottom(1)
+
+	s.ActivityTracker.GridRow = lipgloss.NewStyle()
+
+	// Activity levels using Catppuccin blue colors
+	s.ActivityTracker.Day.None = lipgloss.NewStyle().
+		Width(2).
+		Height(1).
+		Background(surface0). // #313244 - no activity
+		Foreground(surface0)
+
+	s.ActivityTracker.Day.Low = lipgloss.NewStyle().
+		Width(2).
+		Height(1).
+		Background(sapphire). // #74c7ec - low activity
+		Foreground(sapphire)
+
+	s.ActivityTracker.Day.Medium = lipgloss.NewStyle().
+		Width(2).
+		Height(1).
+		Background(blue). // #89b4fa - medium activity
+		Foreground(blue)
+
+	s.ActivityTracker.Day.High = lipgloss.NewStyle().
+		Width(2).
+		Height(1).
+		Background(lavender). // #b4befe - high activity
+		Foreground(lavender)
+
+	s.ActivityTracker.MonthLabel = lipgloss.NewStyle().
+		Foreground(subtext1).
+		Width(3).
+		Align(lipgloss.Center)
+
+	s.ActivityTracker.WeekdayLabel = lipgloss.NewStyle().
+		Foreground(subtext1).
+		Width(2).
+		Align(lipgloss.Center)
+
+	s.ActivityTracker.Legend = lipgloss.NewStyle().
+		MarginTop(1).
+		Foreground(subtext1)
+
+	s.ActivityTracker.LegendItem = lipgloss.NewStyle().
+		MarginRight(1)
+
+	s.ActivityTracker.Stats = lipgloss.NewStyle().
+		MarginTop(2).
+		Padding(1).
+		Border(lipgloss.RoundedBorder()).
+		BorderForeground(surface1)
+
+	s.ActivityTracker.StatValue = lipgloss.NewStyle().
+		Foreground(peach).
+		Bold(true)
+
+	s.ActivityTracker.StatLabel = lipgloss.NewStyle().
+		Foreground(subtext1)
+
+	// Interactive styles for Phase 2 features
+	s.ActivityTracker.SelectedDay = lipgloss.NewStyle().
+		Border(lipgloss.NormalBorder()).
+		BorderForeground(peach).
+		Width(2).
+		Height(1)
+
+	s.ActivityTracker.SelectedItem = lipgloss.NewStyle().
+		Background(surface1).
+		Foreground(text).
+		Bold(true)
+
+	s.ActivityTracker.DetailContainer = lipgloss.NewStyle().
+		Padding(1, 2).
+		Margin(1, 0).
+		Border(lipgloss.RoundedBorder()).
+		BorderForeground(surface1)
+
+	s.ActivityTracker.CommitItem = lipgloss.NewStyle().
+		Padding(0, 1).
+		MarginBottom(1).
+		Border(lipgloss.Border{Left: "│"}, false, false, false, true).
+		BorderForeground(surface1)
+
+	s.ActivityTracker.FilterContainer = lipgloss.NewStyle().
+		Padding(1, 2).
+		Margin(1, 0).
+		Border(lipgloss.RoundedBorder()).
+		BorderForeground(blue)
+
+	s.ActivityTracker.FilterActive = lipgloss.NewStyle().
+		Foreground(green).
+		Bold(true)
+
+	s.ActivityTracker.FilterInactive = lipgloss.NewStyle().
+		Foreground(surface1)
+
+	s.ActivityTracker.PanelTitle = lipgloss.NewStyle().
+		Foreground(blue).
+		Bold(true).
+		MarginBottom(1).
+		Border(lipgloss.Border{Bottom: "─"}, false, false, true, false).
+		BorderForeground(surface1)
+
+	s.ActivityTracker.PanelItem = lipgloss.NewStyle().
+		Padding(0, 1).
+		MarginLeft(1)
+
+	s.ActivityTracker.HelpText = lipgloss.NewStyle().
+		Foreground(overlay0).
+		Italic(true).
+		MarginTop(1)
 
 	return s
 }

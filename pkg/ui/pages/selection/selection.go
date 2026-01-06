@@ -11,6 +11,7 @@ import (
 	"github.com/charmbracelet/soft-serve/pkg/access"
 	"github.com/charmbracelet/soft-serve/pkg/backend"
 	"github.com/charmbracelet/soft-serve/pkg/ui/common"
+	"github.com/charmbracelet/soft-serve/pkg/ui/components/activitytracker"
 	"github.com/charmbracelet/soft-serve/pkg/ui/components/code"
 	"github.com/charmbracelet/soft-serve/pkg/ui/components/selector"
 	"github.com/charmbracelet/soft-serve/pkg/ui/components/tabs"
@@ -25,6 +26,7 @@ type pane int
 const (
 	selectorPane pane = iota
 	readmePane
+	activityPane
 	lastPane
 )
 
@@ -32,22 +34,24 @@ func (p pane) String() string {
 	return []string{
 		"Repositories",
 		"About",
+		"Activity",
 	}[p]
 }
 
 // Selection is the model for the selection screen/page.
 type Selection struct {
-	common     common.Common
-	readme     *code.Code
-	selector   *selector.Selector
-	activePane pane
-	tabs       *tabs.Tabs
+	common          common.Common
+	readme          *code.Code
+	selector        *selector.Selector
+	activityTracker *activitytracker.Model
+	activePane      pane
+	tabs            *tabs.Tabs
 }
 
 // New creates a new selection model.
 func New(c common.Common) *Selection {
 	ts := make([]string, lastPane)
-	for i, b := range []pane{selectorPane, readmePane} {
+	for i, b := range []pane{selectorPane, readmePane, activityPane} {
 		ts[i] = b.String()
 	}
 	t := tabs.New(c, ts)
@@ -72,8 +76,10 @@ func New(c common.Common) *Selection {
 	selector.SetShowHelp(false)
 	selector.SetShowStatusBar(false)
 	selector.DisableQuitKeybindings()
+	activityTracker := activitytracker.New(c)
 	sel.selector = selector
 	sel.readme = readme
+	sel.activityTracker = activityTracker
 	return sel
 }
 
@@ -100,6 +106,7 @@ func (s *Selection) SetSize(width, height int) {
 	s.tabs.SetSize(width, height-hm)
 	s.selector.SetSize(width-wm, height-hm)
 	s.readme.SetSize(width-wm, height-hm-1) // -1 for readme status line
+	s.activityTracker.SetSize(width-wm, height-hm)
 }
 
 // IsFiltering returns true if the selector is currently filtering.
@@ -124,6 +131,8 @@ func (s *Selection) ShortHelp() []key.Binding {
 			k.ClearFilter,
 			copyKey,
 		)
+	} else if s.activePane == activityPane {
+		return s.activityTracker.ShortHelp()
 	}
 	return kb
 }
@@ -150,6 +159,8 @@ func (s *Selection) FullHelp() [][]key.Binding {
 			k.Down,
 			k.Up,
 		})
+	case activityPane:
+		return s.activityTracker.FullHelp()
 	case selectorPane:
 		copyKey := s.common.KeyMap.Copy
 		copyKey.SetHelp("c", "copy command")
@@ -231,6 +242,7 @@ func (s *Selection) Init() tea.Cmd {
 	return tea.Batch(
 		s.selector.Init(),
 		s.selector.SetItems(items),
+		s.activityTracker.Init(),
 		readmeCmd,
 	)
 }
@@ -247,6 +259,11 @@ func (s *Selection) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 		m, cmd := s.selector.Update(msg)
 		s.selector = m.(*selector.Selector)
+		if cmd != nil {
+			cmds = append(cmds, cmd)
+		}
+		a, cmd := s.activityTracker.Update(msg)
+		s.activityTracker = a.(*activitytracker.Model)
 		if cmd != nil {
 			cmds = append(cmds, cmd)
 		}
@@ -270,6 +287,12 @@ func (s *Selection) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case readmePane:
 		r, cmd := s.readme.Update(msg)
 		s.readme = r.(*code.Code)
+		if cmd != nil {
+			cmds = append(cmds, cmd)
+		}
+	case activityPane:
+		a, cmd := s.activityTracker.Update(msg)
+		s.activityTracker = a.(*activitytracker.Model)
 		if cmd != nil {
 			cmds = append(cmds, cmd)
 		}
@@ -306,6 +329,11 @@ func (s *Selection) View() string {
 			s.readme.View(),
 			readmeStatus,
 		))
+	case activityPane:
+		as := lipgloss.NewStyle().
+			Width(s.common.Width - wm).
+			Height(s.common.Height - hm)
+		view = as.Render(s.activityTracker.View())
 	}
 	if s.activePane != selectorPane || s.FilterState() != list.Filtering {
 		tabs := s.common.Styles.Tabs.Render(s.tabs.View())

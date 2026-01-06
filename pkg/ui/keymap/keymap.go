@@ -23,6 +23,17 @@ type KeyMap struct {
 	BackItem   key.Binding
 
 	Copy key.Binding
+
+	// Activity Tracker specific bindings
+	ActivityStats      key.Binding
+	ActivityFilter     key.Binding
+	ActivityTimePeriod key.Binding
+	ActivityRefresh    key.Binding
+	ActivityExport     key.Binding
+	ActivityYear       key.Binding
+	ActivityPrevYear   key.Binding
+	ActivityWeekJump   key.Binding
+	ActivityWeekBack   key.Binding
 }
 
 // DefaultKeyMap returns the default key map.
@@ -224,6 +235,52 @@ func DefaultKeyMap() *KeyMap {
 			"c",
 			"copy text",
 		),
+	)
+
+	// Activity Tracker key bindings
+	km.ActivityStats = key.NewBinding(
+		key.WithKeys("s"),
+		key.WithHelp("s", "statistics"),
+	)
+
+	km.ActivityFilter = key.NewBinding(
+		key.WithKeys("f"),
+		key.WithHelp("f", "filter"),
+	)
+
+	km.ActivityTimePeriod = key.NewBinding(
+		key.WithKeys("t"),
+		key.WithHelp("t", "time period"),
+	)
+
+	km.ActivityRefresh = key.NewBinding(
+		key.WithKeys("r"),
+		key.WithHelp("r", "refresh"),
+	)
+
+	km.ActivityExport = key.NewBinding(
+		key.WithKeys("e"),
+		key.WithHelp("e", "export"),
+	)
+
+	km.ActivityYear = key.NewBinding(
+		key.WithKeys("y"),
+		key.WithHelp("y", "current year"),
+	)
+
+	km.ActivityPrevYear = key.NewBinding(
+		key.WithKeys("Y"),
+		key.WithHelp("Y", "previous year"),
+	)
+
+	km.ActivityWeekJump = key.NewBinding(
+		key.WithKeys("w"),
+		key.WithHelp("w", "next week"),
+	)
+
+	km.ActivityWeekBack = key.NewBinding(
+		key.WithKeys("b"),
+		key.WithHelp("b", "prev week"),
 	)
 
 	return km
